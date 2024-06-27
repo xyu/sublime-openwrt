@@ -1,0 +1,69 @@
+%YAML 1.2
+---
+# See http://www.sublimetext.com/docs/3/syntax.html
+name: OpenWRT UCI Config
+file_extensions:
+  - uci
+first_line_match: '^## UCI Config'
+scope: source.uci
+
+contexts:
+  # The prototype context is prepended to all contexts but those setting
+  # meta_include_prototype: false.
+  prototype:
+    - include: comments
+
+  main:
+    # The main context is the initial starting point of our syntax.
+    # Include other contexts from here (or specify them directly).
+    - include: keywords
+    - include: bools
+    - include: strings
+
+  keywords:
+    - match: '\b(package|config)\b'
+      scope: entity.name.type.uci
+    - match: '\b(option|list)\b'
+      scope: entity.other.attribute-name.uci
+
+  bools:
+    - match: "([']*)(0|1|no|yes|off|on|false|true|disabled|enabled)(['\\s]*)$\\n?"
+      captures:
+        1: punctuation.definition.generic.begin.uci
+        2: constant.language.uci
+        3: punctuation.definition.generic.end.uci
+    - match: "([\"]*)(0|1|no|yes|off|on|false|true|disabled|enabled)([\"\\s]*)$\\n?"
+      captures:
+        1: punctuation.definition.generic.begin.uci
+        2: constant.language.uci
+        3: punctuation.definition.generic.end.uci
+
+  strings:
+    # Strings begin and end with quotes.
+    - match: "'"
+      scope: punctuation.definition.string.begin.uci
+      push:
+        - meta_scope: string.quoted.single.uci
+        - match: '\\.'
+          scope: constant.character.escape.uci
+        - match: "'"
+          scope: punctuation.definition.string.end.uci
+          pop: true
+    - match: '"'
+      scope: punctuation.definition.string.begin.uci
+      push:
+        - meta_scope: string.quoted.double.uci
+        - match: '\\.'
+          scope: constant.character.escape.uci
+        - match: '"'
+          scope: punctuation.definition.string.end.uci
+          pop: true
+
+  comments:
+    # Comments begin with a '#' and finish at the end of the line.
+    - match: '#'
+      scope: punctuation.definition.comment.uci
+      push:
+        - meta_scope: comment.line.octothorpe.uci
+        - match: $\n?
+          pop: true
