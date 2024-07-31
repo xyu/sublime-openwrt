@@ -27,12 +27,12 @@ contexts:
       scope: entity.other.attribute-name.uci
 
   bools:
-    - match: "([']*)(0|1|no|yes|off|on|false|true|disabled|enabled)(['\\s]*)$\\n?"
+    - match: "(['\\s]+)(0|1|no|yes|off|on|false|true|disabled|enabled)(['\\s]+)$\\n?"
       captures:
         1: punctuation.definition.generic.begin.uci
         2: constant.language.uci
         3: punctuation.definition.generic.end.uci
-    - match: "([\"]*)(0|1|no|yes|off|on|false|true|disabled|enabled)([\"\\s]*)$\\n?"
+    - match: "([\"\\s]+)(0|1|no|yes|off|on|false|true|disabled|enabled)([\"\\s]+)$\\n?"
       captures:
         1: punctuation.definition.generic.begin.uci
         2: constant.language.uci
